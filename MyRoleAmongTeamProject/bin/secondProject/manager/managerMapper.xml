@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="managerMapper">
+	
+	<select id = "resClaimList" resultType = "com.aloa.manage.ReportResDTO">
+	select a.reEmail, a.reportname, a.reportcontent, a.resno, b.resname, a.deemail, a.restatus 
+		from ReportRes a , restaurant b 
+		where a.resno = b.resno
+	
+	
+	<select id = "memberList" resultType = "com.aloa.manage.MemberDTO">
+		select * from account where admin=0
+	</select>
+	<update id = "blacklistAdd" parameterType = "String">
+		update account set reportCount=3, status='블랙' where email=#{email}
+	</update>
+	<select	id = "sepcificMember" parameterType = "int" resultType = "com.aloa.manage.MemberDTO">
+		select * from account where id = #{id}
+	</select>
+	
+	<update id = "memberUpdate" parameterType = "com.aloa.manage.MemberDTO">
+			update account set reportCount = 3, status =?? where id = #{id};
+	</update>
+	
+	<select id ="restaurantList" resultType="com.aloa.restaurant.Restaurant">
+		select * from restaurant
+	</select>
+	
+	<delete id = "restaurantDelete" parameterType ="int">
+		begin
+			update account set server=0 where email=(select bossEmail from restaurant where resNo=#{resno});
+			delete imageboard where resno = #{resno};
+			delete restaurant where resNo = #{resno};
+		end;
+	</delete>
+	
+	<select id="restaurantInfo" parameterType="int" resultType="com.aloa.restaurant.Restaurant">
+		select * from restaurant where resNo = #{resno}
+	</select>
+	
+	<update id="restaurantUpdate" parameterType="com.aloa.restaurant.Restaurant">
+		update restaurant set resName = #{resname} ,
+							  bossEmail = #{bossemail},
+							  resAddress = #{resaddress}, 
+							  resTel = #{restel},
+							  resKind = #{reskind},
+							  resPrice = #{resprice},
+							  resParking = #{resparking},
+							  resSaletime = #{ressaletime}, 
+							  resRest = #{resrest}, 
+							  resHoliday = #{resholiday}
+								where resNo = #{resno}
+	</update>
+	
+	<select id= "checkId" parameterType="String" resultType="com.aloa.account.Account">
+		select server, email from account where email=#{id}
+	</select>
+	
+	<insert id="insertRestaurant" parameterType="java.util.Map">
+		begin
+			insert into restaurant (resNo,
+									  resName ,
+									  bossEmail ,
+									  resAddress , 
+									  resTel ,
+									  resKind ,
+									  resPrice ,
+									  resParking ,
+									  resSaletime , 
+									  resRest , 
+									  resHoliday,
+									  createDate)
+									  values(
+									  	seq_restaurant.nextval
+									  	,#{resname}
+									  	,#{bossemail}
+									  	,#{resaddress}
+									  	,#{restel}
+									  	,#{reskind}
+									  	,#{resprice}
+									  	,#{resparking}
+									  	,#{ressaletime}
+									  	,#{resrest}
+									  	,#{resholiday}
+									  	,sysdate);
+			update account set server=1 where email=#{bossemail};
+			insert into imageboard (resno, image) values(seq_restaurant.currval  , #{bossemail}||'_image_1');
+			insert into imageboard (resno, image) values(seq_restaurant.currval  , #{bossemail}||'_image_2');
+			insert into imageboard (resno, image) values(seq_restaurant.currval  , #{bossemail}||'_image_3');
+			insert into imageboard (resno, image) values(seq_restaurant.currval  , #{bossemail}||'_image_4');
+			insert into imageboard (resno, image) values(seq_restaurant.currval  , #{bossemail}||'_image_5');
+		end;
+	</insert>
+	
+	<select id = "memberBlackList" resultType = "com.aloa.manage.MemberDTO">
+		select * from account where reportCount >= 3
+	</select>
+	
+	<select id = "revClaimList" resultType = "com.aloa.manage.ReportRevDTO">
+		select * from ReportRev
+	</select>
+	
+	<delete id = "reviewRemove" parameterType = "int">
+		begin
+		delete from  reviewboard where reviewno = #{reviewno};
+		update reportrev set restatus = '처리' where reviewno = #{reviewno};
+		end;
+	</delete>
+	<select id = "reviewClaimDetail" parameterType = "int" resultType = "com.aloa.manage.ReportRevDTO">
+		select * from ReportRev where reviewNo = #{reviewNo}
+	</select>
+	
+	 
+		
+		
+	</select>
+	<select id = "restaurantClaimDetail" parameterType = "int" resultType = "com.aloa.manage.ReportResDTO">
+		
+		select * from ReportRes where resNo = #{resNo}
+		<!-- select  reEmail, reportname, reportcontent, resno, deemail, restatus  from ReportRes  join imageboard using(resNo) where resno = #{resNo} -->
+	</select>
+	
+	<update id = "restaurantClaimRefuse" parameterType = "int">
+		update ReportRes set restatus = '처리(거절)' where resNo = #{resNo}
+	</update>
+	
+	<delete id = "restaurantClaimUnused" parameterType = "int">
+		begin 
+			update account set reportcount = reportcount + 1 where email = (select deemail from reportRes where resNo = #{resNo});
+			delete from restaurant where resNo = #{resNo};
+			update reportRes set restatus = '처리(맛집제재)' where resNo = #{resNo};
+			
+	
+		end;
+	</delete>
+	<update id = "reviewClaimRefuse" parameterType = "int">
+		update Reportrev set restatus = '처리(거절)' where reviewNo = #{reviewNo}
+	</update>
+	
+	<delete id = "reviewClaimUnused" parameterType = "int">
+		begin 
+			update account set reportcount = reportcount + 1 where email = (select deemail from reportRev where reviewNo = #{reviewNo});
+			update reportRev set restatus = '처리(리뷰제재)' where reviewNo = #{reviewNo};
+			delete from reviewboard where reviewNo = #{reviewNo};
+			
+			
+	
+		end;
+	</delete>
+</mapper>
