@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/cloud/aws/context http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.2.xsd">
+	
+	<bean id = "dataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name = "driverClassName" value = "${jdbc.driverClass}"></property>
+		<property name = "url" value = "${jdbc.url}"></property>
+		<property name = "username" value = "${jdbc.username}"/>
+		<property name = "password" value = "${jdbc.password}" />
+	</bean>
+	
+	<bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+		<property name="algorithm" value="PBEWithMD5AndDES" />
+		<property name="password" value="passwordkey" />
+	</bean>
+	
+	<bean id="encryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+	    <property name="config" ref="encryptorConfig" />
+	</bean>
+	
+	<bean class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
+		<constructor-arg ref = "encryptor"/>
+		<property name = "locations">
+			<list>
+				<value>classpath:/config/jdbc.properties</value>
+			</list>		
+		</property>
+	</bean>
+	<!--  Message -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <!-- 주의: properties 붙이면 안됨 "파일명만 표기"-->
+        <property name="basename" value="classpath:/config/message_ko"/>
+        <property name="defaultEncoding" value="UTF-8" />
+        <!-- 의미없음 why? 리로드 대상 메시지는 클래스패스가 아닌 파일 자원을 이용해야함, 나는 classpath 파일임 -->
+        <property name="cacheSeconds" value="10"/>
+	</bean>
+	
+	<!-- Converter -->
+	<!-- controller에 들어오는 객체값을 알맞게 전환, 일반적으로 string이기 떄문 -->
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean"> 
+        <property name="converters">
+			<set>
+				<bean class="org.hojin.converter.RoleToUserProfileConverter" />
+			</set>
+		</property>
+	</bean>
+	
+	<!-- @Value 사용하기 -->
+	
+	
+	<context:annotation-config />
+	<mvc:annotation-driven />
+	<context:component-scan base-package="org.hojin.configuration"></context:component-scan>
+	 <context:component-scan base-package = "org.hojin.converter"></context:component-scan> 
+	<context:component-scan base-package = "org.hojin.dao"></context:component-scan>
+	<context:component-scan base-package= "org.hojin.service"></context:component-scan>
+	<context:component-scan base-package = "org.hojin.security"></context:component-scan>
+	<context:component-scan base-package = "org.hojin.exception" />
+</beans>
