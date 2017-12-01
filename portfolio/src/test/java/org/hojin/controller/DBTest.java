@@ -46,8 +46,14 @@ public class DBTest {
 	@Inject
 	private SessionFactory session; 
 	
+	@Value("${portfolio.aws.accessKey}")
+	private String accessKey;
+	
+	@Value("${portfolio.aws.secretKey}")
+	private String secretKey;
+	
 	@Value("${portfolio.aws.region}")
-	private String driverClass;
+	private String region;
 	/*@Test
 	public void TestConnection() throws Exception{
 		try(Connection conn = DataSourceUtils.getConnection(data)){
@@ -59,7 +65,9 @@ public class DBTest {
 	
 	@Test
 	public void testdao(){
-	System.out.println(driverClass);	
+	System.out.println(accessKey);	
+	System.out.println(secretKey);
+	System.out.println(region);
 	}
 	
 	

@@ -26,11 +26,6 @@ public class AWSConfiguration {
 	private String region;
 	
 	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev(){
-		return new PropertySourcesPlaceholderConfigurer();
-	}
-	
-	@Bean
 	public BasicAWSCredentials basicAWSCredentials(){
 		return new BasicAWSCredentials(accessKey, secretKey);
 	}
