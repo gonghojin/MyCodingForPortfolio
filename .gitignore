@@ -1,2 +1,4 @@
 portfolio/target/classes/config/awsConfig.properties
 portfolio/src/main/resources/config/awsConfig.properties
+portfolio/target/classes/config/jdbc.properties
+portfolio/target/classes/config/awsConfig.properties
