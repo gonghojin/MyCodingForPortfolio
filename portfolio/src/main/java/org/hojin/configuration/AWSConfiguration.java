@@ -13,7 +13,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 
 @Configuration
-@PropertySource(value = {"classpath:/config/awsConfig.properties"})
+//@PropertySource(value = {"classpath:/config/awsConfig.properties"})
 public class AWSConfiguration {
 	
 	@Value("${portfolio.aws.accessKey}")

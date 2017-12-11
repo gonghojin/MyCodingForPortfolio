@@ -41,7 +41,9 @@
 				<div class="box-header">
 					<h3 class="box-title">REGISTER BOARD</h3>
 				</div>
+				
 				<form:form method="POST" modelAttribute="board" >
+					<c:url var = "myUrl" value = "/aws/s3/upload" />
 					<input type = "hidden" name = "page" value = "${reqPage.page }" />
 					<input type = "hidden" name = "searchType" value = "${reqPage.searchType }" />
 					<input type = "hidden" name = "keyword" value = "${reqPage.keyword }" />
@@ -90,13 +92,45 @@
 	</div>
 	</section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
 <script src="<c:url value = '/resources/vendor/jquery/jquery.js' />"></script>
+<script src = "<c:url value = '/resources/js/upload.js' />"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(".btn-warning").on("click", function(){
 			//window.history.back();
 			self.location = "${pageContext.request.contextPath}" +
 			"/main?page=${reqPage.page}&searchType=${reqPage.searchType}&keyword=${reqPage.keyword}";
+		});
+		
+		
+	//파일업로드 dragover & drop
+		$(".fileDrop").on("dragenter dragover", function(event){
+			event.preventDefault();
+		});
+		$(".fileDrop").on("drop", function(event){
+			event.preventDefault();
+			var files = event.originalEvent.dataTransfer.files;
+			
+			var file = files[0];
+			
+			var formData = new FormData();
+			//유동성 있는 주소
+			var url = "${myUrl}";
+			formData.append("file", file);
+			$.ajax({
+				url : url,
+				type: "post",
+				data: formData,
+				dataType: "text",
+				processData: false,
+				contentType: false,
+			
+				success: function(data){
+					logger.info("작동중");
+				}
+			});
 		});
 	});	
 </script>
