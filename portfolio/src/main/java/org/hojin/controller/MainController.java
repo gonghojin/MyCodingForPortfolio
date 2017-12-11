@@ -20,7 +20,7 @@ public class MainController {
 	@Autowired
 	private BoardService service;
 	
-	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	@RequestMapping(value = {"/main","/"}, method = RequestMethod.GET)
 	public String main(Model model, @ModelAttribute("reqPage") SearchPage searchPage){
 		logger.info("show all list..............");
 		logger.info(searchPage.toString());
