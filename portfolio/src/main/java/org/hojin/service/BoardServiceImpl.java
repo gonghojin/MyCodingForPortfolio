@@ -2,8 +2,10 @@ package org.hojin.service;
 
 import java.util.List;
 
+import org.hojin.dao.BoardAttachDao;
 import org.hojin.dao.BoardDao;
 import org.hojin.model.Board;
+import org.hojin.model.BoardAttach;
 import org.hojin.model.RequestPage;
 import org.hojin.model.SearchPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao dao;
 	
+	@Autowired
+	private BoardAttachDao attachDao;
+	
 	@Override
 	public Board findById(int id) {
 		return dao.findById(id);
@@ -25,6 +30,15 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void save(Board board) {
 		dao.save(board);
+		
+		String[] files = board.getFiles();
+		if(files != null){
+			for(String fileName: files){
+				BoardAttach boardAttach = new BoardAttach();
+				boardAttach.setFullName(fileName);
+				attachDao.save(boardAttach);
+			}
+		}
 	}
 
 	@Override

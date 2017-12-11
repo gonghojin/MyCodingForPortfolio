@@ -3,6 +3,8 @@ package org.hojin.dao;
 import java.util.List;
 
 import org.hojin.model.Board;
+import org.hojin.model.BoardAttach;
+import org.hojin.model.BoardFile;
 import org.hojin.model.RequestPage;
 import org.hojin.model.SearchPage;
 
@@ -23,5 +25,8 @@ public interface BoardDao {
 	
 	List<Board> listSearch(SearchPage searchPage);
 	
+	
 	Integer countListSearch(SearchPage searchPage);
+	
+	
 }

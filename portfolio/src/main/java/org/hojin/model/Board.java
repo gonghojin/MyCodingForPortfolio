@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "APP_BOARD")
-public class Board {
+public class Board extends BoardFile {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer bno;
@@ -92,8 +92,6 @@ public class Board {
 	public String toString() {
 		return "[BNO : " + bno + ", TITLE: " + title + "]";
 	}
-	
-	
 	
 	
 }

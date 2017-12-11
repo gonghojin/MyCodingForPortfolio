@@ -1,6 +1,7 @@
 
 package org.hojin.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -8,6 +9,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hojin.model.Board;
+import org.hojin.model.BoardAttach;
+import org.hojin.model.BoardFile;
 import org.hojin.model.RequestPage;
 import org.hojin.model.SearchPage;
 import org.slf4j.Logger;
@@ -95,5 +98,7 @@ public class BoardDaoImpl extends AbstractDao<Integer, Board> implements BoardDa
 		
 		return ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
 	}
+
+
 
 }
