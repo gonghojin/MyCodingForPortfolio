@@ -43,7 +43,7 @@
 				</div>
 				
 				<form:form method="POST" modelAttribute="board" >
-					<c:url var = "myUrl" value = "/aws/s3/upload" />
+					<c:url var = "myUrl" value = "/file/upload" />
 					<input type = "hidden" name = "page" value = "${reqPage.page }" />
 					<input type = "hidden" name = "searchType" value = "${reqPage.searchType }" />
 					<input type = "hidden" name = "keyword" value = "${reqPage.keyword }" />
@@ -128,7 +128,7 @@
 				contentType: false,
 			
 				success: function(data){
-					logger.info("작동중");
+					console.info("작동중");
 				}
 			});
 		});

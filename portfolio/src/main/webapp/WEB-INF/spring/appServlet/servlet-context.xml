@@ -29,6 +29,14 @@
 	<context:component-scan base-package="org.hojin.controller" />
 	<annotation-driven conversion-service="conversionService" />
 	
+	<!-- 파일업로드 설정 -->
+	<beans:bean id = "multipartResolver" class = "org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name = "maxUploadSize" value = "10485760"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id = "uploadPath" class = "java.lang.String">
+		<beans:constructor-arg value = "C:\\portfolio\\upload" />
+	</beans:bean>
 	<!-- controller에 들어오는 객체값을 알맞게 전환, 일반적으로 string이기 떄문
 	<beans:bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">

@@ -5,7 +5,9 @@ import java.math.BigInteger;
 import org.hojin.model.BoardAttach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
+@Repository("BoardAttachDao")
 public class BoardAttachDaoImpl extends AbstractDao<Integer, BoardAttach> implements BoardAttachDao{
 	
 	static final Logger logger = LoggerFactory.getLogger(BoardAttachDaoImpl.class);

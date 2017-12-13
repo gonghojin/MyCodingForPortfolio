@@ -10,12 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "APP_BOARD")
-public class Board extends BoardFile {
+public class Board {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer bno;
@@ -39,6 +40,18 @@ public class Board extends BoardFile {
 	@Column(name = "VIEWCNT", insertable =false, updatable = false)
 	private Integer viewcnt;
 	
+
+	@Transient//영속성 아닌 필드 사용
+	private String[] files;
+	
+
+	public String[] getFiles() {
+		return files;
+	}
+
+	public void setFiles(String[] files) {
+		this.files = files;
+	}
 
 	public Integer getBno() {
 		return bno;
